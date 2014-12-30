@@ -6,7 +6,7 @@ RSpec.describe "Notes", :type => :request do
       FactoryGirl.create :note, {content: "This is a cool note"}
       FactoryGirl.create :note, {content: "This is another cool note"}
 
-      get "/notes.json", {}
+      get "/notes.json"
 
       json = JSON.parse(response.body)
       note_contents = json.map { |n| n["content"] }
@@ -15,6 +15,17 @@ RSpec.describe "Notes", :type => :request do
         "This is a cool note",
         "This is another cool note"
       ])
+    end
+  end
+
+  describe "GET /notes/:id" do
+    it "returns a note" do
+      note = FactoryGirl.create :note, { content: "This is a cool note"}
+
+      get "/notes/#{note.id}.json"
+
+      json = JSON.parse(response.body)
+      expect(json["content"]).to eq("This is a cool note")
     end
   end
 end
