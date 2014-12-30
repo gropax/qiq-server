@@ -6,9 +6,8 @@ RSpec.describe "Notes", :type => :request do
       FactoryGirl.create :note, {content: "This is a cool note"}
       FactoryGirl.create :note, {content: "This is another cool note"}
 
-      get "/notes.json", {}#, {"Content-Type" => "application/json"}
+      get "/notes.json", {}
 
-      binding.pry
       json = JSON.parse(response.body)
       note_contents = json.map { |n| n["content"] }
 
