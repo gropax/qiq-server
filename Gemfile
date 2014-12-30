@@ -40,10 +40,10 @@ gem 'spring',        group: :development
 
 group :development, :test do
   gem 'rspec-rails', '~> 3.0'
+  gem 'factory_girl_rails'
 end
 
 group :test do
   gem 'shoulda-matchers', require: false
   gem 'database_cleaner'
-  gem 'factory_girl_rails'
 end
