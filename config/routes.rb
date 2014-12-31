@@ -1,6 +1,10 @@
 Rails.application.routes.draw do
 
   resources :notes, only: [:index, :show, :create, :update, :destroy]
+  resources :tags, only: [:index, :show, :create, :update, :destroy]
+
+  post "notes/:id/tags", to: "notes#add_tag"
+  delete "notes/:id/tags/:tag_id", to: "notes#remove_tag"
 
   # Example resource route with options:
   #   resources :products do

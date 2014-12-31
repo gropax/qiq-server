@@ -35,6 +35,16 @@ RSpec.describe "Notes", :type => :request do
       expect(response).to be_success
       expect(json["content"]).to eq("This is a cool note")
     end
+
+    it "include tags if present" do
+      tag = FactoryGirl.create :tag
+      note = FactoryGirl.create(:note) { |n| n.tags << tag }
+
+      get "/notes/#{note.id}.json"
+
+      expect(json).to have_key("tags")
+      expect(json["tags"][0]["name"]).to eq "Awesome"
+    end
   end
 
   describe "POST /notes" do
@@ -109,6 +119,31 @@ RSpec.describe "Notes", :type => :request do
       expect {
         delete "/notes/#{note.id}.json"
       }.to change(Note, :count).by(-1)
+    end
+  end
+
+
+  describe "tagging notes" do
+    describe "POST /notes/:id/tags.json" do
+      it "adds a tag to a note" do
+        tag = FactoryGirl.create :tag
+        note = FactoryGirl.create :note
+
+        post "notes/#{note.id}/tags.json", {tag_id: tag.id}
+
+        expect(Note.find(note.id).tags).to match_array([tag])
+      end
+    end
+
+    describe "DELETE /notes/:id/tags/:tag_id.json" do
+      it "removes a tag from a note" do
+        tag = FactoryGirl.create :tag
+        note = FactoryGirl.create :note, {tags: [tag]}
+
+        delete "notes/#{note.id}/tags/#{tag.id}.json"
+
+        expect(Note.find(note.id).tags).to eq []
+      end
     end
   end
 end
