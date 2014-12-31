@@ -68,4 +68,37 @@ RSpec.describe "Notes", :type => :request do
       end
     end
   end
+
+  describe "PUT /notes/:id" do
+    context "with valid attributes" do
+      it "updates a note" do
+        note = FactoryGirl.create :note, {content: "Before update"}
+
+        put "/notes/#{note.id}.json", {note: valid_attributes}
+
+        content = Note.find(note.id).content
+        expect(content).to eq("This is a cool note")
+      end
+
+      it "returns the note" do
+        note = FactoryGirl.create :note, {content: "Before update"}
+
+        put "/notes/#{note.id}.json", {note: valid_attributes}
+
+        expect(response).to be_success
+        expect(json["content"]).to eq("This is a cool note")
+      end
+    end
+
+    context "with invalid attributes" do
+      it "returns error if wrong note params" do
+        note = FactoryGirl.create :note, {content: "Before update"}
+
+        put "/notes/#{note.id}.json", {note: invalid_attributes}
+
+        expect(response).to have_http_status(:unprocessable_entity)
+        expect(json).to eq({"content" => ["can't be blank"]})
+      end
+    end
+  end
 end
