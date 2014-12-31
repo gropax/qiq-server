@@ -1,6 +1,6 @@
 Rails.application.routes.draw do
 
-  resources :notes, only: [:index, :show, :create, :update]
+  resources :notes, only: [:index, :show, :create, :update, :destroy]
 
   # Example resource route with options:
   #   resources :products do

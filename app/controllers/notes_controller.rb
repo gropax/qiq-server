@@ -1,7 +1,7 @@
 class NotesController < ApplicationController
   respond_to :json
 
-  before_action :set_note, only: [:show, :update]
+  before_action :set_note, only: [:show, :update, :destroy]
 
   def index
     @notes = Note.all
@@ -26,6 +26,11 @@ class NotesController < ApplicationController
     else
       render json: @note.errors, status: :unprocessable_entity
     end
+  end
+
+  def destroy
+    @note.destroy
+    head :no_content
   end
 
   private

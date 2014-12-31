@@ -101,4 +101,14 @@ RSpec.describe "Notes", :type => :request do
       end
     end
   end
+
+  describe "DELETE /notes/:id" do
+    it "deletes a note" do
+      note = FactoryGirl.create :note, {content: "To be deleted"}
+
+      expect {
+        delete "/notes/#{note.id}.json"
+      }.to change(Note, :count).by(-1)
+    end
+  end
 end
